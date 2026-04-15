@@ -85,7 +85,7 @@ class VideoStage(PipelineStage):
     def _add_subtitles_cmd(self, video: Path, subtitles: Path, write_path: Path) -> str:
         style = (
             "Fontname=Arial Black,"
-            "Fontsize=32,"
+            "Fontsize=28,"
             "PrimaryColour=&HFFFFFF&,"
             "OutlineColour=&H000000&,"
             "BackColour=&H80000000,"

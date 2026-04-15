@@ -15,6 +15,10 @@ from pipeline.visual import VisualStage
 from pipeline.voice import VoiceStage
 
 
+def serialize_topic(topic: str) -> str:
+    return topic.replace("'", "")
+
+
 @click.command()
 @click.option("--topic", required=True, help="Topic for the video")
 @click.option("--start-from", default=None, help="Stage to start from")
@@ -26,7 +30,7 @@ def main(topic: str, start_from: Optional[str], only: Optional[str]) -> None:
     openai_llm = OpenAI()
     ctx = PipelineContext(
         dir="results",
-        topic=topic,
+        topic=serialize_topic(topic),
     )
     stages = [
         BriefStage(llm),
