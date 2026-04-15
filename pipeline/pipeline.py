@@ -19,9 +19,10 @@ class PipelineContext:
     brief: Optional[Brief] = None
     visuals: Optional[Visuals] = None
     images: Optional[List[Path]] = None
-    voice: Optional[List[Path]] = None
-    subtitles: Optional[Any] = None
-    video: Optional[Any] = None
+    voices: Optional[List[Path]] = None
+    voice_durations: Optional[List[float]] = None
+    subtitles: Optional[Path] = None
+    video: Optional[Path] = None
 
 
 class PipelineStage(ABC):

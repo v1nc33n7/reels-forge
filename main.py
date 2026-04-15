@@ -9,6 +9,8 @@ from openai import OpenAI
 from pipeline.brief import BriefStage
 from pipeline.images import ImagesStage
 from pipeline.pipeline import Pipeline, PipelineContext
+from pipeline.subtitles import SubtitlesStage
+from pipeline.video import VideoStage
 from pipeline.visual import VisualStage
 from pipeline.voice import VoiceStage
 
@@ -31,6 +33,8 @@ def main(topic: str, start_from: Optional[str], only: Optional[str]) -> None:
         VisualStage(llm),
         ImagesStage(openai_llm),
         VoiceStage(openai_llm),
+        SubtitlesStage(),
+        VideoStage(),
     ]
     pipeline = Pipeline(stages)
 

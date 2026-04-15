@@ -52,19 +52,19 @@ class VisualStage(PipelineStage):
         return ctx
 
     def load_from_disk(self, ctx: PipelineContext) -> PipelineContext:
-        path = f"{ctx.dir}/{ctx.topic}/visual.yaml"
+        path = Path(ctx.dir) / ctx.topic / "visual.yaml"
         with open(path, encoding="utf-8") as f:
-            dict = yaml.load(f, yaml.FullLoader)
-            ctx.visuals = self._parse_visuals(dict)
+            dictionary = yaml.load(f, yaml.FullLoader)
+            ctx.visuals = self._parse_visuals(dictionary)
         return ctx
 
     def _save_on_disk(self, ctx: PipelineContext) -> None:
         if not ctx.visuals:
             raise ValueError("Visuals cannot be None")
 
-        path = f"{ctx.dir}/{ctx.topic}"
-        Path(path).mkdir(parents=True, exist_ok=True)
-        with open(path + "/visual.yaml", "w", encoding="utf-8") as f:
+        path = Path(ctx.dir) / ctx.topic
+        path.mkdir(parents=True, exist_ok=True)
+        with open(path / "visual.yaml", "w", encoding="utf-8") as f:
             yaml.dump(dataclasses.asdict(ctx.visuals), f)
 
     def _parse_visuals(self, data: Any) -> Visuals:

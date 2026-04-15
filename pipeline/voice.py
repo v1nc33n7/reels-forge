@@ -15,31 +15,31 @@ class VoiceStage(PipelineStage):
         if not ctx.brief:
             raise ValueError("Brief cannot be None")
 
-        if not ctx.voice:
-            ctx.voice = []
+        if not ctx.voices:
+            ctx.voices = []
         self._dir(ctx).mkdir(parents=True, exist_ok=True)
 
         index = 0
-        ctx.voice.append(self._save_voice(ctx, index, ctx.brief.hook))
+        ctx.voices.append(self._save_voice(ctx, index, ctx.brief.hook))
         index += 1
         for s in ctx.brief.scenes:
-            ctx.voice.append(self._save_voice(ctx, index, s.narration))
+            ctx.voices.append(self._save_voice(ctx, index, s.narration))
             index += 1
-        ctx.voice.append(self._save_voice(ctx, index, ctx.brief.cta))
+        ctx.voices.append(self._save_voice(ctx, index, ctx.brief.cta))
 
         return ctx
 
     def load_from_disk(self, ctx: PipelineContext) -> PipelineContext:
-        ctx.voice = []
+        ctx.voices = []
 
         directory = self._dir(ctx)
         if not directory.exists():
             raise FileNotFoundError(f"Voice directory does not exist: {directory}")
 
         for p in directory.iterdir():
-            ctx.voice.append(p)
+            ctx.voices.append(p)
 
-        ctx.voice.sort()
+        ctx.voices.sort()
         return ctx
 
     def _save_voice(self, ctx: PipelineContext, index: int, input: str) -> Path:

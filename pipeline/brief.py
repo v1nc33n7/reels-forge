@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import dataclasses
 from pathlib import Path
-from typing import List, cast
+from typing import Any, List, cast
 
 import yaml
 
@@ -39,26 +39,31 @@ class BriefStage(PipelineStage):
 
     def run(self, ctx: PipelineContext) -> PipelineContext:
         human_msg = HumanMessage(content=f"{ctx.topic}")
-        ctx.brief = cast(Brief, self.llm.invoke(input=[_SYSTEM_PROMPT, human_msg]))
+        ctx.brief = self._parse_brief(
+            self.llm.invoke(input=[_SYSTEM_PROMPT, human_msg])
+        )
         self._save_on_disk(ctx)
         return ctx
 
     def load_from_disk(self, ctx: PipelineContext) -> PipelineContext:
-        path = f"{ctx.dir}/{ctx.topic}/brief.yaml"
+        path = Path(ctx.dir) / ctx.topic / "brief.yaml"
         with open(path, encoding="utf-8") as f:
-            brief_dict = yaml.load(f, yaml.FullLoader)
-            brief_dict["scenes"] = [Scene(**s) for s in brief_dict["scenes"]]
-            ctx.brief = Brief(**brief_dict)
+            dictionary = yaml.load(f, yaml.FullLoader)
+            ctx.brief = self._parse_brief(dictionary)
         return ctx
 
     def _save_on_disk(self, ctx: PipelineContext) -> None:
         if not ctx.brief:
             raise ValueError("Brief cannot be None")
 
-        path = f"{ctx.dir}/{ctx.topic}"
-        Path(path).mkdir(parents=True, exist_ok=True)
-        with open(path + "/brief.yaml", "w", encoding="utf-8") as f:
+        path = Path(ctx.dir) / ctx.topic
+        path.mkdir(parents=True, exist_ok=True)
+        with open(path / "brief.yaml", "w", encoding="utf-8") as f:
             yaml.dump(dataclasses.asdict(ctx.brief), f)
+
+    def _parse_brief(self, data: Any) -> Brief:
+        data["scenes"] = [Scene(**s) for s in data["scenes"]]
+        return Brief(**data)
 
 
 BRIEF_RULES = """
