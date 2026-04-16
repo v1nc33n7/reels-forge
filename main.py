@@ -25,7 +25,7 @@ def serialize_topic(topic: str) -> str:
 @click.option("--only", default=None, help="Run only this stage")
 def main(topic: str, start_from: Optional[str], only: Optional[str]) -> None:
     llm = ChatOpenAI(
-        model="gpt-5-nano",
+        model="gpt-5-mini",
     )
     openai_llm = OpenAI()
     ctx = PipelineContext(
