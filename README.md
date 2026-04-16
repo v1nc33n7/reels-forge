@@ -16,18 +16,18 @@ python main.py --topic "Dinner, eat first vegetables, then meat, then carbs to k
 
 ## Flags
 
-`--topic` (required)
-Topic used to generate the video content.
+`--topic`
+Sets the main topic for video generation.
 
 `--start-from`
-Start the pipeline from a specific stage. Useful if previous steps are already generated:
+Starts the pipeline at a specific stage (useful if earlier outputs already exist).
 
 ```bash
 python main.py --topic "Alliance between large technology and pharmaceutical corporations develops a hidden AI-driven health prediction system that raises ethical questions about privacy, consent, and data control" --start-from images
 ```
 
 `--only`
-Run only a single stage of the pipeline:
+Runs only one selected pipeline stage.
 
 ```bash
 python main.py --topic "Astrology and zodiac signs" --only voice
